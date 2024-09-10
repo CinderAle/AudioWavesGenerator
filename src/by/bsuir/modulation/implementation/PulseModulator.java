@@ -12,7 +12,6 @@ public class PulseModulator extends Modulator {
     @Override
     public double getModulatedValue(int sample, int sampleRate) {
         this.result = formula.calculate(2 * Math.PI * sample * frequency / sampleRate);
-
         return amplitude * this.result;
     }
 }

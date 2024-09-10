@@ -8,10 +8,4 @@ public class TriangleModulator extends Modulator {
         super(frequency, amplitude);
         this.formula = new TriangleFormula();
     }
-
-    @Override
-    public double getModulatedValue(int sample, int sampleRate) {
-        this.result += formula.calculate(2 * Math.PI * frequency * sample / sampleRate) * 2 * Math.PI * frequency / sampleRate;
-        return amplitude * result;
-    }
 }

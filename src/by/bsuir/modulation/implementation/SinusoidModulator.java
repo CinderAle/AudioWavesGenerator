@@ -8,10 +8,4 @@ public class SinusoidModulator extends Modulator {
         super(frequency, amplitude);
         this.formula = new SinusoidFormula();
     }
-
-    @Override
-    public double getModulatedValue(int sample, int sampleRate) {
-        this.result += formula.calculate(2 * Math.PI * sample * this.frequency / sampleRate) * 2 * Math.PI * this.frequency / sampleRate;
-        return amplitude * result;
-    }
 }
