@@ -11,7 +11,6 @@ public class SinusoidWaveGenerator extends FrequencyWaveGenerator {
     @Override
     public double[] generateWave(int totalSamples) {
         double[] wave = new double[totalSamples];
-        double fraction = 2.0 * Math.PI * this.frequency / this.sampleRate;
 
         for(int i = 0;i < totalSamples;i++) {
             wave[i] = Math.sin(i * fraction);
@@ -23,7 +22,6 @@ public class SinusoidWaveGenerator extends FrequencyWaveGenerator {
     @Override
     public double[] generateAMWave(int totalSamples, Modulator modulator) {
         double[] wave = new double[totalSamples];
-        double fraction = 2.0 * Math.PI * this.frequency / this.sampleRate;
         double fi = 0;
 
         for(int i = 0;i < totalSamples;i++) {
@@ -38,7 +36,6 @@ public class SinusoidWaveGenerator extends FrequencyWaveGenerator {
     @Override
     public double[] generateFMWave(int totalSamples, Modulator modulator) {
         double[] wave = new double[totalSamples];
-        double fraction = 2.0 * Math.PI * this.frequency / this.sampleRate;
         double fi = 0;
 
         for(int i = 0;i < totalSamples;i++) {

@@ -15,7 +15,6 @@ public class PulseWaveGenerator extends FrequencyWaveGenerator {
     @Override
     public double[] generateWave(int totalSamples) {
         double[] wave = new double[totalSamples];
-        double fraction = 2 * Math.PI * this.frequency / this.sampleRate;
 
         for (int i = 0; i < totalSamples; i++) {
             double value = (fraction * i) % (2 * Math.PI) / (2 * Math.PI);
@@ -28,7 +27,6 @@ public class PulseWaveGenerator extends FrequencyWaveGenerator {
     @Override
     public double[] generateAMWave(int totalSamples, Modulator modulator) {
         double[] wave = new double[totalSamples];
-        double fraction = 2 * Math.PI * this.frequency / this.sampleRate;
         double fi = 0;
 
         for (int i = 0; i < totalSamples; i++) {
@@ -42,7 +40,6 @@ public class PulseWaveGenerator extends FrequencyWaveGenerator {
     @Override
     public double[] generateFMWave(int totalSamples, Modulator modulator) {
         double[] wave = new double[totalSamples];
-        double fraction = 2 * Math.PI * this.frequency / this.sampleRate;
         double fi = 0;
 
         for (int i = 0; i < totalSamples; i++) {

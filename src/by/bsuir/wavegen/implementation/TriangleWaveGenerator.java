@@ -11,7 +11,6 @@ public class TriangleWaveGenerator extends FrequencyWaveGenerator {
     @Override
     public double[] generateWave(int totalSamples) {
         double[] wave = new double[totalSamples];
-        double fraction = 2 * Math.PI * this.frequency / this.sampleRate;
 
         for (int i = 0; i < totalSamples; i++) {
             wave[i] = (2 / Math.PI * (Math.abs(((fraction * i + (3 * Math.PI / 2)) % (2 * Math.PI) - Math.PI)) - (Math.PI / 2)));
@@ -23,7 +22,6 @@ public class TriangleWaveGenerator extends FrequencyWaveGenerator {
     @Override
     public double[] generateAMWave(int totalSamples, Modulator modulator) {
         double[] wave = new double[totalSamples];
-        double fraction = 2 * Math.PI * this.frequency / this.sampleRate;
         double fi = 0;
 
         for (int i = 0; i < totalSamples; i++) {
@@ -37,7 +35,6 @@ public class TriangleWaveGenerator extends FrequencyWaveGenerator {
     @Override
     public double[] generateFMWave(int totalSamples, Modulator modulator) {
         double[] wave = new double[totalSamples];
-        double fraction = 2 * Math.PI * this.frequency / this.sampleRate;
         double fi = 0;
 
         for (int i = 0; i < totalSamples; i++) {
