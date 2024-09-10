@@ -12,7 +12,7 @@ public class WhiteNoiseWaveGenerator extends WaveGenerator {
         Random random = new Random();
 
         for (int i = 0; i < totalSamples; i++) {
-            buffer[i] = random.nextDouble(0, 1);
+            buffer[i] = random.nextDouble(-1, 1);
         }
 
         return buffer;

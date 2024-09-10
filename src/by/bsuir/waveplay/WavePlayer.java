@@ -1,5 +1,6 @@
 package by.bsuir.waveplay;
 
+import by.bsuir.modulation.Modulator;
 import by.bsuir.wavecollection.WaveCollection;
 import by.bsuir.waveconverter.WaveByteConverter;
 import by.bsuir.wavegen.WaveGenerator;
@@ -9,7 +10,7 @@ import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.SourceDataLine;
 
-public class WavePlayer implements IWavePlayer {
+public class WavePlayer implements IWavePlayer, IModulatedPlayer {
 
     private static final int DEFAULT_SAMPLE_RATE = 44100;
 
@@ -34,6 +35,11 @@ public class WavePlayer implements IWavePlayer {
     @Override
     public void play(double duration) {
         double[] wave = this.waves.getWave(duration);
+        playWave(wave);
+    }
+
+    @Override
+    public void playWave(double[] wave) {
         byte[] digitWave = WaveByteConverter.convert(wave, 2);
         AudioFormat audioFormat = new AudioFormat(sampleRate, 16, 1, true, false);
 
@@ -51,5 +57,17 @@ public class WavePlayer implements IWavePlayer {
     @Override
     public void addWave(WaveGenerator waveGenerator) {
         this.waves.add(waveGenerator);
+    }
+
+    @Override
+    public void playAM(double duration, Modulator modulator) {
+        double[] wave = this.waves.getAMWaves(duration, modulator);
+        playWave(wave);
+    }
+
+    @Override
+    public void playFM(double duration, Modulator modulator) {
+        double[] wave = this.waves.getFMWaves(duration, modulator);
+        playWave(wave);
     }
 }

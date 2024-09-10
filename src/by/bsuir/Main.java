@@ -1,12 +1,12 @@
 package by.bsuir;
 
-import by.bsuir.wavegen.implementation.SinusoidWaveGenerator;
+import by.bsuir.modulation.implementation.SinusoidModulator;
+import by.bsuir.wavegen.implementation.PulseWaveGenerator;
 import by.bsuir.waveplay.WavePlayer;
 
 public class Main {
     public static void main(String[] args) {
-        WavePlayer player = new WavePlayer(44100,new SinusoidWaveGenerator(900));
-        player.addWave(new SinusoidWaveGenerator(300));
-        player.play(2);
+        WavePlayer player = new WavePlayer(44100,new PulseWaveGenerator(400, 0.5));
+        player.playFM(2, new SinusoidModulator(2, 1));
     }
 }
