@@ -32,8 +32,8 @@ public class WavePlayer implements IWavePlayer {
     }
 
     @Override
-    public void play(double duration, double frequency) {
-        double[] wave = this.waves.getWave(duration, frequency);
+    public void play(double duration) {
+        double[] wave = this.waves.getWave(duration);
         byte[] digitWave = WaveByteConverter.convert(wave, 2);
         AudioFormat audioFormat = new AudioFormat(sampleRate, 16, 1, true, false);
 

@@ -1,12 +1,9 @@
 package by.bsuir.wavecollection;
 
 import by.bsuir.wavegen.WaveGenerator;
-import by.bsuir.wavegen.implementation.WhiteNoiseWaveGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.function.Supplier;
 
 public class WaveCollection implements IWaveCollection {
     private final ArrayList<WaveGenerator> waves;
@@ -35,16 +32,12 @@ public class WaveCollection implements IWaveCollection {
     }
 
     @Override
-    public double[] getWave(double duration, double frequency) {
+    public double[] getWave(double duration) {
         int totalSamples = (int)(this.sampleRate * duration);
         double[] samples = new double[totalSamples];
 
         for(WaveGenerator generator : waves) {
-            Supplier<Double> frequencyFunction = generator.getClass().equals(WhiteNoiseWaveGenerator.class) ? () -> {
-                Random random = new Random();
-                return random.nextDouble(0, 1);
-            } : () -> frequency;
-            double[] wave = generator.generateWave(totalSamples, frequencyFunction);
+            double[] wave = generator.generateWave(totalSamples);
             for(int i = 0; i < totalSamples; i++) {
                 samples[i] += wave[i];
             }
