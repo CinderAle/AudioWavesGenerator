@@ -12,6 +12,6 @@ public class PulseFormula implements IFormula {
     @Override
     public double calculate(double argument) {
         double value = (argument % (2 * Math.PI)) / (2 * Math.PI);
-        return value <= dutyCycle ? 1 : 0;
+        return value <= dutyCycle ? 1 : -1;
     }
 }

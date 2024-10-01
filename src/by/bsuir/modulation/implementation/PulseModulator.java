@@ -14,4 +14,9 @@ public class PulseModulator extends Modulator {
         this.result = formula.calculate(2 * Math.PI * sample * frequency / sampleRate);
         return amplitude * this.result;
     }
+
+    @Override
+    public double getRelativeValue(int sample, int sampleRate) {
+        return 1 + 0.5 * amplitude * formula.calculate(2 * Math.PI * sample * frequency / sampleRate);
+    }
 }
