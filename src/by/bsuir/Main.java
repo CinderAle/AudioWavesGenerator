@@ -1,8 +1,7 @@
 package by.bsuir;
 
-import by.bsuir.modulation.implementation.SinusoidModulator;
+import by.bsuir.modulation.implementation.SawtoothModulator;
 import by.bsuir.wavegen.implementation.SawtoothWaveGenerator;
-import by.bsuir.wavegen.implementation.SinusoidWaveGenerator;
 import by.bsuir.waveplay.WavePlayer;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartUtilities;
@@ -16,14 +15,16 @@ import java.io.IOException;
 
 public class Main {
     public static void main(String[] args) {
-        WavePlayer player = new WavePlayer(44100,new SinusoidWaveGenerator(440));
+        WavePlayer player = new WavePlayer(44100,new SawtoothWaveGenerator(220));
         //player.addWave(new SawtoothWaveGenerator(262));
+        //player.addWave(new SinusoidWaveGenerator(1000));
+        //player.addWave(new WhiteNoiseWaveGenerator());
         //player.play(2);
-        //player.playFM(2, new SawtoothModulator(0.25, 1));
-        player.playAM(2, new SinusoidModulator(1, 0.5));
+        //player.playFM(4, new SinusoidModulator(0.25, 1));
+        player.playAM(4, new SawtoothModulator(0.5, 1));
 
         XYSeries series = new XYSeries("Graph");
-        double[] sine = new SawtoothWaveGenerator(440).generateAMWave(88200, new SinusoidModulator(0.5, 1));
+        double[] sine = new SawtoothWaveGenerator(440).generateAMWave(88200, new SawtoothModulator(0.5, 1));
         //double[] sine = new SinusoidWaveGenerator(5).generateWave(88200);
         for(int i = 0; i < sine.length; i++){
             series.add(i, sine[i]);

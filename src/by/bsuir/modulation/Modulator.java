@@ -21,6 +21,6 @@ public abstract class Modulator implements IModulator {
 
     @Override
     public double getRelativeValue(int sample, int sampleRate) {
-        return amplitude * this.formula.calculate(2 * Math.PI * frequency * sample / sampleRate + Math.PI);
+        return (1 + amplitude * this.formula.calculate(2 * Math.PI * frequency * sample / sampleRate + Math.PI)) / (2 * amplitude);
     }
 }

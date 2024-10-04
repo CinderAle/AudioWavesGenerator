@@ -32,7 +32,7 @@ public abstract class FrequencyWaveGenerator extends WaveGenerator {
         double fi = 0;
 
         for (int i = 0; i < totalSamples; i++) {
-            wave[i] = formula.calculate(fi) * (1 + modulator.getRelativeValue(i, sampleRate));
+            wave[i] = formula.calculate(fi) * modulator.getRelativeValue(i, sampleRate);
             fi += fraction;
         }
 
