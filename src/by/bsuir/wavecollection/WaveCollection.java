@@ -41,7 +41,7 @@ public class WaveCollection implements IWaveCollection, IModulatedWaveCollection
         for(WaveGenerator generator : waves) {
             double[] wave = generator.generateWave(totalSamples);
             for(int i = 0; i < totalSamples; i++) {
-                samples[i] += wave[i];
+                samples[i] += wave[i] / waves.size();
             }
         }
 
@@ -83,7 +83,7 @@ public class WaveCollection implements IWaveCollection, IModulatedWaveCollection
                 wave = generator.generateWave(totalSamples);
             }
             for(int i = 0; i < totalSamples; i++) {
-                samples[i] += wave[i];
+                samples[i] += wave[i] / waves.size();
             }
         }
 
