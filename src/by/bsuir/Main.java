@@ -1,43 +1,66 @@
 package by.bsuir;
 
-import by.bsuir.modulation.implementation.SawtoothModulator;
-import by.bsuir.wavegen.implementation.SawtoothWaveGenerator;
-import by.bsuir.waveplay.WavePlayer;
+import by.bsuir.filter.HighFrequencyFilter;
+import by.bsuir.filter.LowFrequencyFilter;
+import by.bsuir.fourier.FastFourierTransformer;
+import by.bsuir.fourier.IFourierTransformer;
+import by.bsuir.wavegen.implementation.SinusoidWaveGenerator;
 import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-import java.io.File;
-import java.io.IOException;
+import javax.swing.*;
+import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
-        WavePlayer player = new WavePlayer(44100,new SawtoothWaveGenerator(220));
-        //player.addWave(new SawtoothWaveGenerator(262));
-        //player.addWave(new SinusoidWaveGenerator(1000));
-        //player.addWave(new WhiteNoiseWaveGenerator());
-        //player.play(2);
-        //player.playFM(4, new SinusoidModulator(0.25, 1));
-        player.playAM(4, new SawtoothModulator(0.5, 1));
 
-        XYSeries series = new XYSeries("Graph");
-        double[] sine = new SawtoothWaveGenerator(440).generateAMWave(88200, new SawtoothModulator(0.5, 1));
-        //double[] sine = new SinusoidWaveGenerator(5).generateWave(88200);
-        for(int i = 0; i < sine.length; i++){
-            series.add(i, sine[i]);
-        }
-        XYSeriesCollection collection = new XYSeriesCollection(series);
-        JFreeChart chart = ChartFactory.createXYLineChart(null, "x", "y", collection, PlotOrientation.VERTICAL, true, true, false);
+        double[] wave = new SinusoidWaveGenerator(1024).generateWave(1024);
+        IFourierTransformer transformer = new FastFourierTransformer();
+        transformer.calculateSpectrum(wave);
+        double[] amplitudeSpectrum = transformer.getAmplitudeSpectrum();
+        double[] frequencySpectrum = transformer.getPhaseSpectrum();
 
-        try {
-            ChartUtilities.saveChartAsPNG(new File("D:/images/chart.png"), chart, 1280, 720);
+        // ВЧ и НЧ одновременно дают полосовой фильтр
+        double[] restored = transformer.restoreSignal();
+        double[] filtered = new HighFrequencyFilter(new LowFrequencyFilter(wave).filter(25)).filter(10);
+
+        XYSeries seriesAmplitude = new XYSeries("Amplitude spectrum");
+        XYSeries seriesFrequency = new XYSeries("Phase spectrum");
+        XYSeries seriesRestored = new XYSeries("Restored");
+        XYSeries seriesFiltered = new XYSeries("Filtered");
+        for (int i = 0; i < frequencySpectrum.length; i++) {
+            seriesAmplitude.add(i, amplitudeSpectrum[i]);
+            seriesFrequency.add(i, frequencySpectrum[i]);
+            seriesRestored.add(i, restored[i]);
+            seriesFiltered.add(i, filtered[i]);
         }
-        catch (IOException ex) {
-            System.err.println(ex.getMessage());
-        }
+        XYSeriesCollection collectionAmplitude = new XYSeriesCollection(seriesAmplitude);
+        JFreeChart chartAmplitude = ChartFactory.createXYLineChart(null, "x", "y", collectionAmplitude, PlotOrientation.VERTICAL, true, true, false);
+
+        XYSeriesCollection collectionFrequency = new XYSeriesCollection(seriesFrequency);
+        JFreeChart chartFrequency = ChartFactory.createXYLineChart(null, "x", "y", collectionFrequency, PlotOrientation.VERTICAL, true, true, false);
+
+        XYSeriesCollection collectionRestored = new XYSeriesCollection(seriesRestored);
+        JFreeChart chartRestored = ChartFactory.createXYLineChart(null, "x", "y", collectionRestored, PlotOrientation.VERTICAL, true, true, false);
+
+        XYSeriesCollection collectionFiltered = new XYSeriesCollection(seriesFiltered);
+        JFreeChart chartFiltered = ChartFactory.createXYLineChart(null, "x", "y", collectionFiltered, PlotOrientation.VERTICAL, true, true, false);
+
+        JFrame frame = new JFrame("Spectrum");
+        frame.setLayout(new FlowLayout());
+        frame.getContentPane().add(new ChartPanel(chartAmplitude));
+        frame.getContentPane().add(new ChartPanel(chartFrequency));
+        frame.getContentPane().add(new ChartPanel(chartRestored));
+        frame.getContentPane().add(new ChartPanel(chartFiltered));
+
+        frame.setSize(1400, 900);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
 
     }
 }
