@@ -18,7 +18,7 @@ import java.awt.*;
 public class Main {
     public static void main(String[] args) {
 
-        double[] wave = new SinusoidWaveGenerator(1024).generateWave(1024);
+        double[] wave = new SinusoidWaveGenerator(660).generateWave(1024);
         IFourierTransformer transformer = new FastFourierTransformer();
         transformer.calculateSpectrum(wave);
         double[] amplitudeSpectrum = transformer.getAmplitudeSpectrum();
@@ -32,6 +32,7 @@ public class Main {
         XYSeries seriesFrequency = new XYSeries("Phase spectrum");
         XYSeries seriesRestored = new XYSeries("Restored");
         XYSeries seriesFiltered = new XYSeries("Filtered");
+
         for (int i = 0; i < frequencySpectrum.length; i++) {
             seriesAmplitude.add(i, amplitudeSpectrum[i]);
             seriesFrequency.add(i, frequencySpectrum[i]);

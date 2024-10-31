@@ -76,16 +76,16 @@ public class FastFourierTransformer implements IFourierTransformer {
     @Override
     public double[] restoreSignal() {
         int N = amplitudeSpectrum.length;
-        double[] restoredSignal = new double[N];
+        double[] real = new double[N];
+        double[] imag = new double[N];
 
-        for (int t = 0; t < N; t++) {
-            double sum = 0.0;
-            for (int k = 0; k < N; k++) {
-                sum += amplitudeSpectrum[k] * Math.cos(2 * Math.PI * k * t / N + phaseSpectrum[k]);
-            }
-            restoredSignal[t] = sum / N;
+        // Формируем комплексные числа из амплитуды и фазы
+        for (int i = 0; i < N; i++) {
+            real[i] = amplitudeSpectrum[i] * Math.cos(phaseSpectrum[i]);
+            imag[i] = amplitudeSpectrum[i] * Math.sin(phaseSpectrum[i]);
         }
 
-        return restoredSignal;
+        fft(real, imag);
+        return real;
     }
 }
