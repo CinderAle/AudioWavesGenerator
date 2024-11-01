@@ -5,10 +5,10 @@ import by.bsuir.wavecollection.WaveCollection;
 import by.bsuir.waveconverter.WaveByteConverter;
 import by.bsuir.wavegen.WaveGenerator;
 
-import javax.sound.sampled.AudioFormat;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
 
 public class WavePlayer implements IWavePlayer, IModulatedPlayer {
 
@@ -47,10 +47,14 @@ public class WavePlayer implements IWavePlayer, IModulatedPlayer {
             sourceDataLine.open(audioFormat);
             sourceDataLine.start();
             sourceDataLine.write(digitWave, 0, digitWave.length);
+            AudioSystem.write(new AudioInputStream(new ByteArrayInputStream(digitWave), audioFormat, digitWave.length), AudioFileFormat.Type.WAVE, new File("D:/images/test.wav"));
             sourceDataLine.drain();
         }
         catch (LineUnavailableException e) {
             throw new RuntimeException(e);
+        }
+        catch (IOException e) {
+            System.out.println("E");
         }
     }
 

@@ -1,10 +1,8 @@
 package by.bsuir;
 
-import by.bsuir.filter.HighFrequencyFilter;
-import by.bsuir.filter.LowFrequencyFilter;
 import by.bsuir.fourier.FastFourierTransformer;
-import by.bsuir.fourier.IFourierTransformer;
-import by.bsuir.wavegen.implementation.SinusoidWaveGenerator;
+import by.bsuir.wavegen.implementation.WhiteNoiseWaveGenerator;
+import by.bsuir.waveplay.WavePlayer;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -17,27 +15,29 @@ import java.awt.*;
 
 public class Main {
     public static void main(String[] args) {
+        int discrete = 32768;
+        double[] wave = new WhiteNoiseWaveGenerator().generateWave(discrete);
 
-        double[] wave = new SinusoidWaveGenerator(660).generateWave(1024);
-        IFourierTransformer transformer = new FastFourierTransformer();
+        FastFourierTransformer transformer = new FastFourierTransformer();
         transformer.calculateSpectrum(wave);
+        transformer.highPassFilter(5000, discrete);
         double[] amplitudeSpectrum = transformer.getAmplitudeSpectrum();
         double[] frequencySpectrum = transformer.getPhaseSpectrum();
-
-        // ВЧ и НЧ одновременно дают полосовой фильтр
         double[] restored = transformer.restoreSignal();
-        double[] filtered = new HighFrequencyFilter(new LowFrequencyFilter(wave).filter(25)).filter(10);
+
+        WavePlayer player = new WavePlayer(discrete);
+        player.playWave(restored);
 
         XYSeries seriesAmplitude = new XYSeries("Amplitude spectrum");
         XYSeries seriesFrequency = new XYSeries("Phase spectrum");
-        XYSeries seriesRestored = new XYSeries("Restored");
+        XYSeries seriesRestored = new XYSeries("Original");
         XYSeries seriesFiltered = new XYSeries("Filtered");
 
         for (int i = 0; i < frequencySpectrum.length; i++) {
             seriesAmplitude.add(i, amplitudeSpectrum[i]);
             seriesFrequency.add(i, frequencySpectrum[i]);
-            seriesRestored.add(i, restored[i]);
-            seriesFiltered.add(i, filtered[i]);
+            seriesRestored.add(i, wave[i]);
+            seriesFiltered.add(i, restored[i]);
         }
         XYSeriesCollection collectionAmplitude = new XYSeriesCollection(seriesAmplitude);
         JFreeChart chartAmplitude = ChartFactory.createXYLineChart(null, "x", "y", collectionAmplitude, PlotOrientation.VERTICAL, true, true, false);
