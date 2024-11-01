@@ -20,7 +20,7 @@ public class Main {
 
         FastFourierTransformer transformer = new FastFourierTransformer();
         transformer.calculateSpectrum(wave);
-        transformer.highPassFilter(5000, discrete);
+        transformer.highPassFilter(10000, discrete);
         double[] amplitudeSpectrum = transformer.getAmplitudeSpectrum();
         double[] frequencySpectrum = transformer.getPhaseSpectrum();
         double[] restored = transformer.restoreSignal();

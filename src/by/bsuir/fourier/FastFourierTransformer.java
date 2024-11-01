@@ -59,39 +59,6 @@ public class FastFourierTransformer implements IFourierTransformer {
         }
     }
 
-    private void ifft(double[] real, double[] imag) {
-        int N = real.length;
-
-        if (N <= 1) {
-            return;
-        }
-
-        double[] evenReal = new double[N / 2];
-        double[] evenImag = new double[N / 2];
-        double[] oddReal = new double[N / 2];
-        double[] oddImag = new double[N / 2];
-        for (int k = 0; k < N / 2; k++) {
-            evenReal[k] = real[k * 2];
-            evenImag[k] = imag[k * 2];
-            oddReal[k] = real[k * 2 + 1];
-            oddImag[k] = imag[k * 2 + 1];
-        }
-
-        ifft(evenReal, evenImag);
-        ifft(oddReal, oddImag);
-
-        for (int k = 0; k < N / 2; k++) {
-            double t = 2 * Math.PI * k / N;
-            double wReal = Math.cos(t);
-            double wImag = Math.sin(t);
-
-            real[k] = evenReal[k] + (wReal * oddReal[k]) / 2;
-            imag[k] = evenImag[k] + (wImag * oddImag[k]) / 2;
-            real[k + N / 2] = evenReal[k] - (wReal * oddReal[k]) / 2;
-            imag[k + N / 2] = evenImag[k] - (wImag * oddImag[k]) / 2;
-        }
-    }
-
     @Override
     public void calculateSpectrum(double[] signal) {
         int N = signal.length;
