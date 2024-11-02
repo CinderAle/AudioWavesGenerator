@@ -73,6 +73,13 @@ public class FastFourierTransformer implements IFourierTransformer {
 
         for(int i = 0; i < real.length; i++) {
             real[i] /= real.length;
+
+            if(real[i] > 1) {
+                real[i] = 1;
+            }
+            if(real[i] < -1) {
+                real[i] = -1;
+            }
         }
 
         return real;
